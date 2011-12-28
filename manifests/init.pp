@@ -10,7 +10,7 @@
 # architectures: extra architectures to mirror
 # sources: mirror sources (true)
 # enabled: enable cron job (true)
-#
+# nthreads: 20
 # Actions:
 #
 # Requires: apt-mirror debian package
@@ -27,6 +27,7 @@ class debianmirror (
     $components = 'main contrib non-free',
     $architectures = [],
     $sources = true,
+    $nthreads = 20,
     $enabled = true) {
 
   package {
