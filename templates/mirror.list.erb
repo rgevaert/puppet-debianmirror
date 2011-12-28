@@ -1,5 +1,7 @@
 ############# config ##################
 #
+# Managed with Puppet
+#
 # set base_path    /var/spool/apt-mirror
 #
 # set mirror_path  $base_path/mirror
@@ -14,21 +16,15 @@ set _tilde 0
 #
 ############# end config ##############
 
+<% distributions.each do |distribution| -%>
+# mirror <%= distribution %>
 deb http://<%= mirror %>/debian <%= distribution %> <%= components %>
+<% if sources -%>
 deb-src http://<%= mirror %>/debian <%= distribution %> <%= components %>
+<% end -%>
+<% architectures.each do |arch| -%>
+deb-<%= arch %> http://<%= mirror %>/debian <%= distribution %> <%= components %>
+<% end -%>
 
-# mirror additional architectures
-#deb-alpha http://<%= mirror %>/debian <%= distribution %> <%= components %>
-#deb-amd64 http://<%= mirror %>/debian <%= distribution %> <%= components %>
-#deb-armel http://<%= mirror %>/debian <%= distribution %> <%= components %>
-#deb-hppa http://<%= mirror %>/debian <%= distribution %> <%= components %>
-#deb-i386 http://<%= mirror %>/debian <%= distribution %> <%= components %>
-#deb-ia64 http://<%= mirror %>/debian <%= distribution %> <%= components %>
-#deb-m68k http://<%= mirror %>/debian <%= distribution %> <%= components %>
-#deb-mips http://<%= mirror %>/debian <%= distribution %> <%= components %>
-#deb-mipsel http://<%= mirror %>/debian <%= distribution %> <%= components %>
-#deb-powerpc http://<%= mirror %>/debian <%= distribution %> <%= components %>
-#deb-s390 http://<%= mirror %>/debian <%= distribution %> <%= components %>
-#deb-sparc http://<%= mirror %>/debian <%= distribution %> <%= components %>
-
+<% end -%>
 clean http://<%= mirror %>/debian

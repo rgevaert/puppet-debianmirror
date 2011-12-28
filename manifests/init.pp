@@ -3,10 +3,13 @@
 # This module manages debian mirrors.
 #
 # Parameters:
-# template 
-# mirror
-# distribution
-# components
+# template: to override default template
+# mirror: host to mirror from (ftp.us.debian.org)
+# distributions:['unstable']
+# components: 'main contrib non-free'
+# architectures: extra architectures to mirror
+# sources: mirror sources (true)
+# enabled: enable cron job (true)
 #
 # Actions:
 #
@@ -15,16 +18,16 @@
 # Sample Usage:
 #
 #   include debianmirror
-#   debianmirror::instance{
-#     test:
-#   }
 #
 # [Remember: No empty lines between comments and class definition]
 class debianmirror (
     $template = 'debianmirror/mirror.list.erb',
     $mirror = 'ftp.us.debian.org',
-    $distribution = 'unstable',
-    $components = 'main contrib non-free') {
+    $distributions = ['unstable'],
+    $components = 'main contrib non-free',
+    $architectures = [],
+    $sources = true,
+    $enabled = true) {
 
   package {
     'apt-mirror':
@@ -39,7 +42,10 @@ class debianmirror (
         group   => root,
         content => template($template);
     '/etc/cron.d/apt-mirror':
-        ensure  => present,
+        ensure  => $enabled ? {
+          true  => present,
+          false => absent,
+        },
         mode    => 644,
         owner   => root,
         group   => root,
