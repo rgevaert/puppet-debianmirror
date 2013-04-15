@@ -1,0 +1,30 @@
+############# config ##################
+#
+# Managed with Puppet
+#
+# set base_path    /var/spool/apt-mirror
+#
+# set mirror_path  $base_path/mirror
+# set skel_path    $base_path/skel
+# set var_path     $base_path/var
+# set cleanscript $var_path/clean.sh
+# set defaultarch  <running host architecture>
+# set postmirror_script $var_path/postmirror.sh
+# set run_postmirror 0
+set nthreads     <%= nthreads %>
+set _tilde 0
+#
+############# end config ##############
+
+<% distributions.each do |distribution| -%>
+# mirror <%= distribution %>
+deb http://<%= mirror %>/debian <%= distribution %> <%= components %>
+<% if sources -%>
+deb-src http://<%= mirror %>/debian <%= distribution %> <%= components %>
+<% end -%>
+<% architectures.each do |arch| -%>
+deb-<%= arch %> http://<%= mirror %>/debian <%= distribution %> <%= components %>
+<% end -%>
+
+<% end -%>
+clean http://<%= mirror %>/debian

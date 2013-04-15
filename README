@@ -1,0 +1,5 @@
+debianmirror
+
+This is the debianmirror module.  You can use it to build a Debian mirror.
+
+It uses apt-mirror.
