@@ -36,7 +36,7 @@ class debianmirror (
   }
 
   file {
-    '/etc/apt/apt-mirror.list':
+    '/etc/apt/mirror.list':
         ensure => present,
         mode    => 644,
         owner   => root,
